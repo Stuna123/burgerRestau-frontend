@@ -1,0 +1,263 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css");
+
+/* Variables globales */
+:root {
+    --bg: #f5f5f5;
+    --text: #222;
+    --white: #fff;
+    --primary: #e63946;
+    --primary-dark: #c92a36;
+    --font-title: 'Poppins', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+body.dark {
+    --bg: #1a1a1a;
+    --text: #ddd;
+    --white: #2b2b2b;
+    --primary: #ff505f;
+    --primary-dark: #ff1f32;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 1.3rem;
+}
+
+main {
+    min-height: 85.9vh;
+}
+
+/* Container */
+.container {
+    width: 95%;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+/* Boxes */
+.order-summary,
+.order-form {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+h2.title {
+    padding: 20px 0;
+}
+
+/* Command description */
+.order-line {
+    display: flex;
+    align-items: flex-end;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #ccc;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.order-line:hover {
+    transition: .3s ease;
+    transform: translate(10px, -10px);
+}
+
+.order-line .details {
+    margin-left: 3.5rem;    
+}
+
+.order-line .thumb {
+    width: 30%;
+}
+
+.order-total {
+    margin-top: 15px;
+    text-align: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Form */
+.order-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Button */
+.btn {
+    padding: 12px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+}
+
+#toggle-mode {
+    font-size: large;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 8px 12px;
+    background: #111;
+    border: none;
+    border-radius: 50%;
+    color: rgb(255, 255, 255);
+}
+
+#toggle-mode:hover {
+    background: var(--primary);
+    transition: .3s ease;
+}
+
+.actions a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+/* Footer */
+.footer {
+    margin: 0;
+    padding: 1.5rem;
+    background-color: #111;
+    color: #ebe4e4;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Responsive */
+@media (min-width: 768px) and (min-width: 1024px) {
+
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        font-size: 1.3rem;
+    }
+
+    .order-line .details {
+        font-size: 1.3rem;    
+    }
+
+    .actions a {
+        display: flex;
+        justify-content: center;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    h1, h2 {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        font-size: 10px;
+    }
+
+    .actions a {
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .order-line .details {
+        font-size: 1rem;    
+    }
+
+    .order-line .thumb {
+        width: 40%;
+        display: flex;
+        align-self: center;
+    }
+}
+
+@media (min-width: 240px) and (max-width: 300px) {
+    .header {
+        width: 100%;
+    }
+
+    h1, h2 {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+
+    .actions a {
+        display: flex;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .order-line {
+        display: flex;
+        align-items: flex-end;
+        padding: 15px;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #ccc;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+    }
+
+    .order-line .details {
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+        margin-left: 1rem;
+    }
+
+    .order-line .thumb {
+        width: 40%;
+        display: flex;
+        align-self: center;
+    }
+
+    footer {
+        width: 100%;
+        text-align: center;
+    }
+
+}

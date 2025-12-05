@@ -1,11 +1,11 @@
 const tabs = document.querySelectorAll(".tab-btn");
-const sections = document.querySelectorAll(".menu");
+const menus_ = document.querySelectorAll(".menu");
 
 tabs.forEach(btn => {
     btn.addEventListener("click", () => {
         // Retirer "active" partout
         tabs.forEach(btn => btn.classList.remove("active"))
-        sections.forEach(sect => sect.classList.remove("active"))
+        menus_.forEach(sect => sect.classList.remove("active"))
 
         // Ajouter active à l'onglet cliqué
         btn.classList.add("active");

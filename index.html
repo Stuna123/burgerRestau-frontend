@@ -14,16 +14,20 @@
         <header class="header">
             <h1> Burger House </h1>
             <p> Meilleur Burger de la ville </p>
+            <a class="myBucket" href="panier.html"> 
+                <i class="bi bi-cart"> </i><span id="cart-count">0</span>
+            </a>
         </header>
-            <nav class="tabs">
-                <button class="tab-btn active" data-target="menu">Menus</button>
-                <button class="tab-btn" data-target="burgers">Burgers</button>
-                <button class="tab-btn" data-target="snacks">Snacks</button>
-                <button class="tab-btn" data-target="boissons">Boissons</button>
-                <button class="tab-btn" data-target="salades">Salades</button>
-                <button class="tab-btn" data-target="desserts">Desserts</button>
-            </nav>
-        <main>
+        <nav class="tabs">
+            <button class="tab-btn active" data-target="menu">Menus</button>
+            <button class="tab-btn" data-target="burger">Burgers</button>
+            <button class="tab-btn" data-target="snack">Snacks</button>
+            <button class="tab-btn" data-target="boisson">Boissons</button> 
+            <button class="tab-btn" data-target="salade">Salades</button>
+            <button class="tab-btn" data-target="dessert">Desserts</button>
+        </nav>
+        
+        <main> 
             <section id="menu" class="menu active">
                 <h2 class="section-title"> Notre Menu </h2>
                 <div class="menu-grid">
@@ -66,7 +70,7 @@
                 </div>
             </section>
 
-            <section id="burgers" class="menu">
+            <section id="burger" class="menu">
                 <h2 class="section-title">Nos Burgers</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
@@ -108,7 +112,7 @@
                 </div>
             </section>
 
-            <section id="snacks" class="menu">
+            <section id="snack" class="menu">
                 <h2 class="section-title">Nos Snacks</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
@@ -144,7 +148,7 @@
                 </div>
             </section>
 
-            <section id="salades" class="menu">
+            <section id="salade" class="menu">
                 <h2 class="section-title">Nos Salades</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
@@ -180,7 +184,7 @@
                 </div>
             </section>
 
-            <section id="boissons" class="menu">
+            <section id="boisson" class="menu">
                 <h2 class="section-title">Nos Boissons</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
@@ -222,7 +226,7 @@
                 </div>
             </section>
 
-            <section id="desserts" class="menu">
+            <section id="dessert" class="menu">
                 <h2 class="section-title">Nos Desserts</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
@@ -261,8 +265,8 @@
         <footer class="footer">
             <p>© 2025 Burger House </p>
         </footer>
-    
-    <script src="script.js"></script>
-    <script src="app.js"></script>
+        
+        <script src=""></script>
+        <script src="app.js"></script>
     </body>
 </html>

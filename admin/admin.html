@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>Admin - Burger House</title>
+        <link rel="shortcut icon" type="image/x-icon" href="../favicon/icone_1.ico">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="admin.css">
+    </head>
+
+    <body>
+        <header class="admin-header">
+            <h1> Panel Administrateur </h1>
+            <div class="stats" id="stats">
+                <!-- stats injectées ici -->
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <section class="controls">
+                <input id="search" placeholder=" Rechercher par nom, id, N° phone..." />
+                <select id="filter">
+                    <option value="all"> Toutes </option>
+                    <option value="processed"> Traîtées </option>
+                    <option value="pending"> En attente </option>
+                </select>
+                <button title="Rafraîchir" id="refresh"><i style="font-size:1.3rem; font-weight: bold;" class="material-icons">refresh</i></button>
+            </section>
+            
+            <section id="orders-list" class="orders-list">
+                <!-- commandes injectées -->
+            </section>
+        </main>
+
+        <div id="modal" class="modal hidden">
+            <div class="modal-inner">
+                <button id="close-modal" class="close">X</button>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+
+    <script src="admin.js"></script>
+    </body>
+</html>

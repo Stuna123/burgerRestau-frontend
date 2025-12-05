@@ -1,0 +1,196 @@
+/* Import font poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+/* Variables globales */
+:root {
+    --bg: #f0f5fa;
+    --card: #fff;
+    --color: #222;
+    --primary: #ff7a00;
+    --muted: #777;
+    --danger: #c92a36;
+    --valid: #2b8a3e;
+    --shadow: 0 4px 12px rgba(0,0,0,0.15);
+    --font: "Poppins", sans-serif;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--color);
+}
+
+/* Header */
+.admin-header {
+    background: white;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.stats {
+    font-size: .9rem;
+    text-align: right;
+    color: var(--muted);
+}
+
+/* Main */
+.admin-main {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.controls input,
+.controls select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: var(--card);
+    flex: 1;
+    min-width: 160px;
+}
+
+.controls button {
+    background: var(--primary);
+    border: none;
+    padding: 10px 16px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    min-width: 140px;
+    transition: .2s;
+}
+
+.controls button:hover {
+    background: #d16905;
+}
+
+/* Order list */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Order card */
+.order-card {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.order-meta {
+    font-size: .9rem;
+}
+
+.order-items {
+    background: #f8f8f8;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+.order-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 150px;
+}
+
+.order-actions button {
+    padding: 8px;
+    border: 0;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-view { background: #444; }
+.btn-process { background: var(--valid); }
+.btn-delete { background: var(--danger); }
+
+/* hover */
+.order-actions button:hover { opacity: .8; }
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+.modal.hidden { display: none; }
+
+.modal-inner {
+    background: white;
+    padding: 20px;
+    width: 95%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    animation: fadeIn .25s ease;
+}
+
+.close {
+    border: none;
+    background: transparent;
+    font-size: 1.6rem;
+    float: right;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+
+    .admin-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .controls {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .order-card {
+        flex-direction: column;
+    }
+
+    .order-actions {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-actions {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,76 @@
+Burger House - Frontend
+************************
+Application web moderne de commande de burgers en ligne.
+Ce dépôt contient tout le code du frontend, développé en : 
+    - HTML/CSS3/JavaScripit (ES6), 
+    - Backend Nodejs (entièrement responsive, connecté à une API qui est sur une autre repo).
+
+Fonctionnalités principales
+****************************
+
+1. Catalogue des Burgers
+    - Affichage dynamique depuis l'API Backend
+    - Classement par catégories
+    - Ajout au panier 
+
+2. Panier interactif
+    - Modifier quantité
+    - Voir total en temps réel
+    - Mode sombre intégré
+
+3. Paiement & Livraison
+    - Formulaire de commande
+    - Validation
+    - Envoi de la commande vers l'API Backend
+
+4. Espace Administrateur
+    - Authentification par email + mot de passe
+    - Liste des commandes
+    - Statistiques (CA, commandes traitées, ...)
+    - Détails du produits, traitement et suppression de commandes
+
+Techonologies utilisés
+***********************
+    - HTML5
+    - CSS3 (flexbox Grid, responsive)
+    - JavsScript Vanilla (fetch API, DOM, LocalStorage)
+    - Backend : Nodejs + MongoDB (repo séparé)
+
+Installation 
+*************
+    Important : ce repo contient uniquement le frontend.
+    Vous devez aussi cloner le backend si vous voulez tester en local.
+
+    1. Cloner le repo
+        git clone https://github.com/ton-username/burgerhouse-frontend.git
+        cd burgerhouse-frontend
+
+    2. Lancer en local
+        Vous pouvez utiliser une extension serveur comme Live Server, ou :
+            npx serve .
+
+Configuration API 
+*******************
+Dans chaque fichier .js du frontend (panier, commander, etc), vous pouvez choisir soit le : 
+    - Mode local
+        > const API_URL = "http://localhost:5000/api;"
+    - Mode production
+        > const API_URL = "https://burgerrestau-backend.onrender.com/api";
+
+Déploiement sur Netlify
+************************
+    1. Aller sur https://app.netlify.com
+    2. Create new site -> Import from Github 
+    3. Sélectionner le repo frontend
+    4. Build command: Aucune
+    5. Publish directory: /(racine) 
+
+About me
+*********
+    Ce projet a été réalisé par mes soins grâce aux connaissances acquises à l’ESIEA et au travers de différentes plateformes MOOC.
+    Je m'appelle Francis TABORA, jeune diplômé en Software Engineering, passionné par le développement Web (front/backend) et par la création d’interfaces modernes.
+    Je tiens à remercier mes professeurs de l’ESIEA ainsi que les formateurs Shubham Sarda, John le Codeur et Nicolas de Believemy pour la qualité de leurs enseignements.
+
+    Pour me contacter :
+    📩 Email : tabora@et.esiea.fr
+    🔗 LinkedIn : https://www.linkedin.com/in/francis-tabora-afata

@@ -5,9 +5,10 @@
     --primary: #ffb703;
     --secondary: #fb8500;
     --dark: #222;
-    --light: #fff;
+    --white: #fff;
     --font-title: 'Poppins', sans-serif;
     --font-body: 'Open Sans', sans-serif;
+    --box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 * {
@@ -19,13 +20,13 @@
 body {
     font-family: var(--font-body);
     background-color: var(--dark);
-    color: var(--light);
+    color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
 }
 
 img {
-    max-width: 100%;
+    width: 100%;
     border-radius: 10px;
     display: block;
 }
@@ -44,12 +45,13 @@ img {
     padding: 3rem 1rem;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: var(--dark);
+    
 }
 
 .header:hover {
     cursor: pointer;
     transition: 0.5s ease-in-out;
-    color: var(--light);
+    color: var(--white);
 }
 
 .header h1 {
@@ -60,6 +62,48 @@ img {
 
 .header p {
     font-size: 1.5rem;
+    padding-bottom: 1rem;
+}
+/*
+    .header .myBucket {
+        background-color: var(--dark);
+        padding: .5rem;
+        border-radius: 5px;
+        color: var(--white);
+        font-size: 1rem;
+        font-family: var(--font-title);
+        color: var(--white);
+        text-decoration: none;
+    }
+*/
+
+.header .myBucket {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: var(--dark);
+    padding: 11px 19px;
+    color: var(--white);
+    border-radius: 30%;
+    font-size: 1rem;
+    font-family: var(--font-title);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+}
+
+.header #cart-count {
+    background-color: var(--white);
+    color: #e63946;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 1px 10px;
+    font-size: 1rem;
+    min-width: 22px;
+    text-align: center;
+    animation: pop 0.3s ease;
 }
 
 .tabs {
@@ -73,10 +117,12 @@ img {
 
 .tab-btn {
     background: none;
-    border: 2px solid var(--primary);
+    border: 0px solid var(--primary);
     border-radius: 5px;
     color: var(--primary);
     font-size: 1rem;
+    font-family: var(--font-title);
+    font-weight: 700;
     padding: .6rem 1.5rem;
     cursor: pointer;
     transition: .3s ease-in-out;
@@ -89,7 +135,7 @@ img {
 
 .tab-btn.active {
     background: var(--primary);
-    color: var(--dark);
+    color: var(--white);
 }
 
 main {
@@ -100,6 +146,7 @@ main {
     display: none;
     opacity: 0;
     padding: 3rem 1rem;
+    font-family: var(--font-title);
     text-align: center;
     transition: opacity 0.4s ease-in-out;
 }
@@ -150,8 +197,44 @@ main {
     font-weight: bold;
     color: var(--secondary);
     font-size: 1.1rem;
+    font-family: var(--font-title);
 }
 
+/* Bouton panier */
+.add-to-cart-btn {
+    display: block;
+    margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    background-color: var(--secondary);
+    color: var(--white);
+    border: none;
+    border-radius: 7px;
+    font-family: var(--font-title);
+    font-size: 1rem;
+    text-align: center;
+    transition: transform .2s ease;
+}
+
+.add-to-cart-btn.pop {
+    transform: scale(1.15);
+}
+
+.add-to-cart-btn:hover {
+    background-color: #aa691f;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #111;
+    color: #ebe4e4;
+    font-size: 1rem;
+}
+
+/* Media query & keyframe */
 @media screen and (max-width: 1024px) {
     .menu-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -188,10 +271,14 @@ main {
     }
 }
 
-.footer {
-    text-align: center;
-    padding: 1.5rem;
-    background-color: #111;
-    color: #ebe4e4;
-    font-size: 1rem;
+@keyframes pop {
+    0% {
+        transform: scale(.5);
+    } 
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
