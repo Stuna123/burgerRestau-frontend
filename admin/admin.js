@@ -1,4 +1,8 @@
-const API_URL = "http://localhost:5000/api/orders";
+// const API_URL = "http://localhost:5000/api/orders";
+const API_URL = window.location.hostname === "localhost"
+  ? "http://localhost:5000/api/orders"
+  : "https://burgerrestau-backend.onrender.com/api/orders";
+
 const token = localStorage.getItem("admin_token");
 if (!token) window.location.href = "admin-login.html";
 

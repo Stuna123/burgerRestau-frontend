@@ -100,7 +100,7 @@ if (form) {
             // Pour essayer en local : http://localhost:5000/api/orders 
             // Pour essayer avec render : https://burgerrestau-backend.onrender.com/api/orders
 
-            const res = await fetch("http://localhost:5000/api/orders", {
+            const res = await fetch("https://burgerrestau-backend.onrender.com/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),
