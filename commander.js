@@ -1,10 +1,15 @@
+// API URL dynamique (local ou Render)
+const API_URL = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api/orders"
+    : "https://burgerrestau-backend.onrender.com/api/orders";
+
 // Récup panier
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const orderItems = document.getElementById("order-items");
 const totalPriceEl = document.getElementById("total-price");
 const form = document.getElementById("checkout-form");
-const toggleBtn = document.getElementById("toggle-mode"); // peut être null
+const toggleBtn = document.getElementById("toggle-mode"); 
 const usernname = document.getElementById("name");
 const phoneNumber = document.getElementById("phone");
 const adress = document.getElementById("address");
@@ -100,7 +105,7 @@ if (form) {
             // Pour essayer en local : http://localhost:5000/api/orders 
             // Pour essayer avec render : https://burgerrestau-backend.onrender.com/api/orders
 
-            const res = await fetch("https://burgerrestau-backend.onrender.com/api/orders", {
+            const res = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),

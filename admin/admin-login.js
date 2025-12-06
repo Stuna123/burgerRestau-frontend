@@ -1,16 +1,7 @@
-// const API_URL = "https://burgerrestau-backend.onrender.com/api/auth";
-// const API_URL = "http://localhost:5000/api/auth";
-
-/*
-    const API_URL = window.location.hostname === "localhost"
+// API URL dynamique (local ou Render)
+const API_URL = window.location.hostname === "localhost"
     ? "http://localhost:5000/api/auth"
     : "https://burgerrestau-backend.onrender.com/api/auth";
-*/
-
-const API_URL =
-    window.location.hostname === "localhost"
-        ? "http://localhost:5000/api/auth"
-        : "https://burgerrestau-backend.onrender.com/api/auth";
 
 document.getElementById("login-form").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -18,8 +9,8 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
-    if (!email) {
-        document.getElementById("msg").textContent = "Email cannot be empty";
+    if (!email || !password) {
+        document.getElementById("msg").textContent = "Email et mot de passe requis";
         return;
     }
 
@@ -35,8 +26,10 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
 
         if (!res.ok) throw new Error(data.message || "Erreur de connexion");
 
+        // Stockage du token
         localStorage.setItem("admin_token", data.token);
 
+        // Redirection
         window.location.href = "admin.html";
 
     } catch (error) {

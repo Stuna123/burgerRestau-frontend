@@ -16,24 +16,22 @@
             <button id="toggle-mode">🌙</button>
         </header>
 
-        <main class="container">
+        <div id="content">
+            <main class="container">
+                <section id="cart-items"></section>
+                <div class="total-container">
+                    Total : <span id="total-price">0.00€</span>
+                </div>
 
-            <section id="cart-items"></section>
-
-            <div class="total-container">
-                Total : <span id="total-price">0.00€</span>
-            </div>
-
-            <div class="actions">
-                <a href="index.html" class="btn secondary">  ⬅ Retour au menu</a>
-                <a href="commander.html" class="btn primary"> Passer à la commande</a>
-            </div>
-        </main>
-
+                <div class="actions">
+                    <a href="index.html" class="btn secondary">  ⬅ Retour au menu</a>
+                    <a href="commander.html" class="btn primary"> Passer à la commande</a>
+                </div>
+            </main>
+        </div>
         <footer class="footer">
             <p>© 2025 Burger House</p>
         </footer>
-
         <script src="panier.js"></script>
     </body>
 </html>

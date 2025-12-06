@@ -21,8 +21,16 @@ body.dark {
     --primary-dark: #ff1f32;
 }
 
-body {
+html, body {
+    width: 100%;
+    height: 100%;
     margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-title);
@@ -52,6 +60,11 @@ body {
 #toggle-mode:hover {
     background: var(--primary);
     transition: .3s ease;
+}
+
+/* Inner wrap */
+#content {
+    flex-grow: 1;
 }
 
 /* Container*/
@@ -180,11 +193,14 @@ a {
 
 /* Footer */
 .footer {
-    padding: 15px;
+    padding: 1.5rem;
+    background-color: #111;
+    color: #ebe4e4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1rem;
     text-align: center;
-    background: #111;
-    color: #fff;
-    min-height: 30vh;
 }
 
 /* Responsive */

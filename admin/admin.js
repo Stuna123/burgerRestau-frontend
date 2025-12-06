@@ -1,11 +1,13 @@
-// const API_URL = "http://localhost:5000/api/orders";
+// API URL dynamique (local ou Render) 
 const API_URL = window.location.hostname === "localhost"
-  ? "http://localhost:5000/api/orders"
-  : "https://burgerrestau-backend.onrender.com/api/orders";
+    ? "http://localhost:5000/api/auth"
+    : "https://burgerrestau-backend.onrender.com/api/auth";
 
+// Token présent ?
 const token = localStorage.getItem("admin_token");
 if (!token) window.location.href = "admin-login.html";
 
+// Headers d’authentification
 function authHeaders() {
     return {
         "Content-Type": "application/json",
@@ -13,14 +15,7 @@ function authHeaders() {
     };
 }
 
-// Choix backend (local ou production)
-// const API_URL = "https://burgerrestau-backend.onrender.com/api/orders";
-/*
-const API_URL = window.location.hostname === "localhost"
-  ? "http://localhost:5000/api/orders"
-  : "https://burgerrestau-backend.onrender.com/api/orders";
-*/
-// Variables DOM
+// DOM 
 const ordersList    = document.querySelector("#orders-list");
 const searchInput   = document.querySelector("#search");
 const filterSelect  = document.querySelector("#filter");
@@ -33,20 +28,26 @@ const closeModalbtn = document.querySelector("#close-modal");
 
 let ordersCache = [];
 
-// --- FETCH COMMANDES ---
+// Fetch commandes
 async function fetchOrders() {
     try {
         const res = await fetch(API_URL, { headers: authHeaders() });
+
+        if (!res.ok) {
+            ordersList.innerHTML = `<div class="small">Erreur de chargement</div>`;
+            return;
+        }
+
         ordersCache = await res.json();
         renderOrders(ordersCache);
         fetchStats();
     } catch (err) {
-        console.error("Erreur fetch orders", err);
-        ordersList.innerHTML = `<div class="small"> Erreur de chargement des commandes </div>`;
+        console.error("Erreur fetchOrders:", err);
+        ordersList.innerHTML = `<div class="small">Erreur serveur</div>`;
     }
 }
 
-// --- FETCH STATS ---
+// Fetch stats
 async function fetchStats() {
     try {
         const res = await fetch(API_URL + "/stats/summary", { headers: authHeaders() });
@@ -58,26 +59,31 @@ async function fetchStats() {
             <p> CA: <strong>${s.totalRevenue.toFixed(2)}€</strong> </p>
             <p> Traitées: <strong>${s.processed}</strong> </p>
         `;
-    } catch (e) {
+    } catch {
         statsEl.textContent = "";
     }
 }
 
-// --- AFFICHAGE COMMANDES ---
+// Affichage de la liste des commandes 
 function renderOrders(list) {
     if (!list.length) {
-        ordersList.innerHTML = `<div class="small"> Aucune commande </div>`;
+        ordersList.innerHTML = `<div class="small">Aucune commande</div>`;
         return;
     }
+
     ordersList.innerHTML = list.map(o => orderCardHTML(o)).join("");
     attachOrderEvents();
 }
 
 function orderCardHTML(o) {
     const processed = o.processed 
-        ? `<span class="small"> Traité</span>` 
-        : `<span>... En attente</span>`;
-    const itemsPreview = (o.cart || []).map(i => `${i.name} x${i.quantity}`).join(", ");
+        ? `<span class="small">Traité</span>` 
+        : `<span class="small">En attente</span>`;
+
+    const itemsPreview =
+        (o.cart || [])
+        .map(i => `${i.name} x${i.quantity}`)
+        .join(", ");
 
     return `
     <div class="order-card" data-id="${o._id}">
@@ -99,44 +105,23 @@ function orderCardHTML(o) {
     </div>`;
 }
 
-// --- ACTIONS ---
+// Actions à faire (voir, traîtement et supprimer)
 function attachOrderEvents() {
-    document.querySelectorAll(".order-card").forEach(card => {
-        const id = card.dataset.id;
-        card.querySelectorAll("button").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const action = btn.dataset.action;
-                if (action === "view") return openModal(id);
-                if (action === "process") return toggleProcessed(id);
-                if (action === "delete") return deleteOrder(id);
-            });
-        });
+    document.querySelectorAll(".order-card button").forEach(btn => {
+        const id = btn.closest(".order-card").dataset.id;
+        const action = btn.dataset.action;
+
+        if (action === "view") btn.onclick = () => openModal(id);
+        if (action === "process") btn.onclick = () => toggleProcessed(id);
+        if (action === "delete") btn.onclick = () => deleteOrder(id);
     });
-}
-
-function filterOrders() {
-    const q = searchInput.value.trim().toLowerCase();
-    const f = filterSelect.value;
-    let list = ordersCache.slice();
-
-    if (f === "processed") list = list.filter(o => o.processed);
-    if (f === "pending") list = list.filter(o => !o.processed);
-
-    if(q) {
-        list = list.filter(o => 
-            o.name.toLowerCase().includes(q) ||
-            (o.phone || "").toLowerCase().includes(q) || 
-            o._id.toLowerCase().includes(q) || 
-            (o.cart || []).some(i => i.name.toLowerCase().includes(q))
-        )
-    }
-    renderOrders(list);
 }
 
 async function toggleProcessed(id) {
     try {
         const current = ordersCache.find(o => o._id === id);
-        const res = await fetch(API_URL + "/" + id, {
+
+        const res = await fetch(`${API_URL}/${id}`, {
             method: "PUT",
             headers: authHeaders(),
             body: JSON.stringify({ processed: !current.processed })
@@ -145,36 +130,34 @@ async function toggleProcessed(id) {
         const updated = await res.json();
         ordersCache = ordersCache.map(o => o._id === id ? updated : o);
 
-        filterOrders();
         renderOrders(ordersCache);
         fetchStats();
     } catch {
-        alert("Erreur lors de la mise à jour !");
+        alert("Erreur mise à jour !");
     }
 }
 
 async function deleteOrder(id) {
-    if (!confirm("Voulez-vous définitivement supprimer cette commande ?")) return;
+    if (!confirm("Supprimer la commande ?")) return;
 
     try {
-        const res = await fetch(API_URL + "/" + id, {
+        const res = await fetch(`${API_URL}/${id}`, {
             method: "DELETE",
             headers: authHeaders()
         });
 
         if (!res.ok) throw new Error();
-        ordersCache = ordersCache.filter(o => o._id !== id);
 
-        filterOrders()
+        ordersCache = ordersCache.filter(o => o._id !== id);
         renderOrders(ordersCache);
         fetchStats();
     } catch {
-        alert("Erreur de suppression !");
+        alert("Erreur suppression !");
     }
 }
 
-// --- MODAL ---
-async function openModal(id) {
+// Modal
+function openModal(id) {
     const o = ordersCache.find(x => x._id === id);
     if (!o) return;
 
@@ -183,30 +166,31 @@ async function openModal(id) {
         <p><strong>Client:</strong> ${o.name} — ${o.phone}</p>
         <p><strong>Adresse:</strong> ${o.address}</p>
         <p><strong>Date:</strong> ${new Date(o.createdAt).toLocaleString()}</p>
+
         <h4>Articles</h4>
         <ul>
-            ${(o.cart || []).map(i => `<li>${i.name} x${i.quantity} — ${(i.price * i.quantity).toFixed(2)}€</li>`).join("")}
+            ${(o.cart || [])
+                .map(i => `<li>${i.name} x${i.quantity} — ${(i.price*i.quantity).toFixed(2)}€</li>`)
+                .join("")}
         </ul>
+
         <p><strong>Total:</strong> ${(o.total || 0).toFixed(2)}€</p>
     `;
 
     modal.classList.remove("hidden");
 }
 
-closeModalbtn.addEventListener("click", () => modal.classList.add("hidden"));
-modal.addEventListener("click", e => {
-    if (e.target === modal) modal.classList.add("hidden");
-});
+closeModalbtn.onclick = () => modal.classList.add("hidden");
+modal.onclick = (e) => { if (e.target === modal) modal.classList.add("hidden"); };
 
-// --- EVENTS ---
-refreshBtn.addEventListener("click", fetchOrders);
-filterSelect.addEventListener("change", filterOrders);
+// Evenement recherche
+refreshBtn.onclick = fetchOrders;
+filterSelect.onchange = () => renderOrders(ordersCache);
 
-let debounceTimer = null;
-searchInput.addEventListener("input", () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(filterOrders, 400);
-});
+searchInput.oninput = () => {
+    clearTimeout(window._searchTimer);
+    window._searchTimer = setTimeout(() => filterOrders(), 300);
+};
 
-// --- INITIAL LOAD ---
+// Lancement
 fetchOrders();

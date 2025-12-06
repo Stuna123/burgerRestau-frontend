@@ -1,10 +1,7 @@
-// URL du backend : à modifier selon ton localhost ou ton déploiement
-// const API_URL = "https://burgerrestau-backend.onrender.com/api/products";
-
-// const API_URL = "http://localhost:5000/api/products";
+// API URL dynamique (local ou Render)
 const API_URL = window.location.hostname === "localhost"
-  ? "http://localhost:5000/api/orders"
-  : "https://burgerrestau-backend.onrender.com/api/orders";
+    ? "http://localhost:5000/api/products"
+    : "https://burgerrestau-backend.onrender.com/api/products";
 
 // Sélection des sections par ID
 const sections = {
