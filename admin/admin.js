@@ -1,7 +1,7 @@
 // API URL dynamique (local ou Render) 
 const API_URL = window.location.hostname === "localhost"
-    ? "http://localhost:5000/api/auth"
-    : "https://burgerrestau-backend.onrender.com/api/auth";
+    ? "http://localhost:5000/api/orders"
+    : "https://burgerrestau-backend.onrender.com/api/orders";
 
 // Token présent ?
 const token = localStorage.getItem("admin_token");
