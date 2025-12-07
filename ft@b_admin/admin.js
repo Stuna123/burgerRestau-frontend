@@ -15,7 +15,7 @@ function authHeaders() {
     };
 }
 
-// DOM 
+// Variable DOM 
 const ordersList    = document.querySelector("#orders-list");
 const searchInput   = document.querySelector("#search");
 const filterSelect  = document.querySelector("#filter");
@@ -26,6 +26,11 @@ const modal         = document.querySelector("#modal");
 const modalBody     = document.querySelector("#modal-body");
 const closeModalbtn = document.querySelector("#close-modal");
 
+const PER_PAGE = 5;
+const themeBtn = document.getElementById("toggle-theme");
+
+let chartInstance = null;
+let currentPage = 1;
 let ordersCache = [];
 
 // Fetch commandes
@@ -39,8 +44,16 @@ async function fetchOrders() {
         }
 
         ordersCache = await res.json();
-        renderOrders(ordersCache);
+
+        // Appliquer les filtres actuels
+        filterOrders();
+
+        // Stats
         fetchStats();
+
+        // chart
+        renderChart();
+        
     } catch (err) {
         console.error("Erreur fetchOrders:", err);
         ordersList.innerHTML = `<div class="small">Erreur serveur</div>`;
@@ -130,7 +143,7 @@ async function toggleProcessed(id) {
         const updated = await res.json();
         ordersCache = ordersCache.map(o => o._id === id ? updated : o);
 
-        renderOrders(ordersCache);
+        filterOrders()
         fetchStats();
     } catch {
         alert("Erreur mise à jour !");
@@ -149,7 +162,7 @@ async function deleteOrder(id) {
         if (!res.ok) throw new Error();
 
         ordersCache = ordersCache.filter(o => o._id !== id);
-        renderOrders(ordersCache);
+        filterOrders();
         fetchStats();
     } catch {
         alert("Erreur suppression !");
@@ -163,9 +176,9 @@ function openModal(id) {
 
     modalBody.innerHTML = `
         <h3>Commande #${o._id}</h3>
-        <p><strong>Client:</strong> ${o.name} — ${o.phone}</p>
-        <p><strong>Adresse:</strong> ${o.address}</p>
-        <p><strong>Date:</strong> ${new Date(o.createdAt).toLocaleString()}</p>
+        <p><strong>Client :</strong> ${o.name} — ${o.phone}</p>
+        <p><strong>Adresse :</strong> ${o.address}</p>
+        <p><strong>Date :</strong> ${new Date(o.createdAt).toLocaleString()}</p>
 
         <h4>Articles</h4>
         <ul>
@@ -183,14 +196,153 @@ function openModal(id) {
 closeModalbtn.onclick = () => modal.classList.add("hidden");
 modal.onclick = (e) => { if (e.target === modal) modal.classList.add("hidden"); };
 
-// Evenement recherche
-refreshBtn.onclick = fetchOrders;
-filterSelect.onchange = () => renderOrders(ordersCache);
+// Filtre + recherches
+function filterOrders() {
+    const q = (searchInput.value || "").trim().toLowerCase();
+    const f = filterSelect.value; 
 
-searchInput.oninput = () => {
-    clearTimeout(window._searchTimer);
-    window._searchTimer = setTimeout(() => filterOrders(), 300);
-};
+    let list = ordersCache.slice();
+
+    // filtre statut
+    if(f === "processed") {
+        list = list.filter(o => !!o.processed);
+    } else if (f === "pending") {
+        list = list.filter(o => !o.processed);
+    }
+
+    if(q) {
+        list = list.filter( o => {
+            const name  = (o.name || "").toLowerCase().includes(q);
+            const phone = (o.phone || "").toLowerCase().includes(q);
+            const id = (o._id || "").toLowerCase().includes(q);
+            const inItems = (o.cart || []).some(i => (i.name || "").toLowerCase().includes(q));
+
+            return name || phone || id || inItems;
+        })
+    }
+
+    currentPage = 1;
+    renderOrdersWithPagination(list);
+}
+
+// Pagination
+function paginate(list, page = 1, perPage = PER_PAGE) {
+    const start = (page - 1) * perPage;
+    const pageItems = list.slice(start, start + perPage);
+    const totalPages = Math.ceil(list.length/perPage) || 1;
+
+    return { pageItems, totalPages };
+}
+
+function renderOrdersWithPagination(list) {
+    const { pageItems, totalPages } = paginate(list, currentPage, PER_PAGE);
+
+    renderOrders(pageItems);
+
+    const pageEl = document.getElementById("pagination");
+    if(!pageEl) 
+        return;
+
+    pageEl.innerHTML = "";
+
+    //prev
+    const prev = document.createElement("button");
+    prev.textContent = "<";
+    prev.disabled = currentPage === 1;
+    prev.onclick = () => {
+        currentPage--;
+        renderOrdersWithPagination(list);
+    };
+    pageEl.appendChild(prev);
+
+    //pages
+    for(let p = 1; p <= totalPages; p++) {
+        const b = document.createElement("button");
+        b.textContent = p;
+        b.className = p === currentPage ? "active" : "";
+        b.onclick = () => {
+            currentPage = p;
+            renderOrdersWithPagination(list);
+        }
+        pageEl.appendChild(b);
+    }
+
+    //next
+    const next = document.createElement("button");
+    next.textContent = ">";
+    next.disabled = currentPage === totalPages;
+    next.onclick = () => {
+        currentPage++;
+        renderOrdersWithPagination(list);
+    };
+    pageEl.appendChild(next);
+}
+
+// chart graphique
+// chart graphique
+async function renderChart() {
+    try {
+        const res = await fetch(API_URL + "/stats/summary", { headers: authHeaders() });
+        const data = await res.json();
+        const ctx = document.getElementById("ordersChart");
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["Traîtées", "En attente"],
+                datasets: [{
+                    data: [data.processed, data.totalOrders - data.processed],
+                    backgroundColor: ["#2b8a3e", "#ff7a00"],
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error("Erreur chart :", error);
+    }
+}
+
+
+// Evenement recherche
+refreshBtn.addEventListener("click", () => {
+    window.location.reload();
+} );
+filterSelect.addEventListener("change", filterOrders);
+
+let debounceTimer = null;
+searchInput.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => filterOrders(), 300)
+});
 
 // Lancement
 fetchOrders();
+
+// Mode sombre
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    themeBtn.textContent = "🌞";
+}
+
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    themeBtn.textContent = isDark ? "🌞" : "🌕";
+
+    // Sauvegarde le theme
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+})

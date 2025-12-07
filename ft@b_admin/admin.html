@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
+
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <title>Admin - Burger House</title>
         <link rel="shortcut icon" type="image/x-icon" href="../favicon/icone_1.ico">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -14,11 +15,13 @@
     <body>
         <header class="admin-header">
             <h1> Panel Administrateur </h1>
-            <div class="stats" id="stats">
-                <!-- stats injectées ici -->
+            <div class="header-right">
+                <button id="toggle-theme" class="theme-btn"> 🌕 </button>
+                <div class="stats" id="stats"><!-- stats injectées ici --></div>
             </div>
         </header>
 
+        <canvas id="ordersChart"></canvas>
         <main class="admin-main">
             <section class="controls">
                 <input id="search" placeholder=" Rechercher par nom, id, N° phone..." />
@@ -27,12 +30,14 @@
                     <option value="processed"> Traîtées </option>
                     <option value="pending"> En attente </option>
                 </select>
-                <button title="Rafraîchir" id="refresh"><i style="font-size:1.3rem; font-weight: bold;" class="material-icons">refresh</i></button>
+                <button title="Actualiser" id="refresh">
+                    <i class="material-icons">refresh</i></button>
             </section>
-            
+
             <section id="orders-list" class="orders-list">
                 <!-- commandes injectées -->
             </section>
+            <div id="pagination" class="pagination"></div>
         </main>
 
         <div id="modal" class="modal hidden">
@@ -42,6 +47,8 @@
             </div>
         </div>
 
-    <script src="admin.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="admin.js"></script>
     </body>
+
 </html>
